@@ -86,6 +86,22 @@ describe "Authentication" do
       end
     end
 
+    describe 'for signed-in users' do
+      let(:user) {FactoryGirl.create(:user)}
+      let(:other_user) {FactoryGirl.create(:user)}
+      before {sign_in user}
+
+      describe 'Users#create' do
+        before {post users_path(user: other_user)}
+        specify {response.should redirect_to(root_path)}
+      end
+
+      describe 'Users#new' do
+        before {get new_user_path}
+        specify {response.should redirect_to(root_path)}
+      end
+    end
+
     describe 'as wrong user' do
       let(:user) {FactoryGirl.create(:user)}
       let(:wrong_user) {FactoryGirl.create(:user, email: 'wrong@example.com')}

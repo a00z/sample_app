@@ -79,8 +79,22 @@ describe "Authentication" do
         end
 
         describe 'after signing in' do
-          it 'should render the desired protected page' do
-            page.should have_selector('title', text: 'Edit user')
+          it 'should friendly forward: render the desired protected page' do
+            page.should have_page_title('Update your profile', 'Edit user')
+          end
+
+          describe 'when signing in again' do
+            before do
+              delete signout_path 
+              visit signin_path
+              fill_in 'Email', with: user.email
+              fill_in 'Password', with: user.password
+              click_button 'Sign in'
+            end
+
+            it 'should render the default post-signin (profile) page' do
+              page.should have_page_title(user.name)
+            end
           end
         end
       end

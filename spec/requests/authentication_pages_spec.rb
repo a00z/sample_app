@@ -1,12 +1,22 @@
 require 'spec_helper'
 
+  class Object
+    def log(message)
+      Rails.logger.info "----#{message} #{Time.new}"
+    end
+  end
+
 describe "Authentication" do
   subject {page}
 
   describe 'signin page' do
-    before {visit signin_path}
+    before do
+      visit signin_path
+    end
 
-    it {should have_page_title('Sign in')}
+    it do
+      should have_page_title('Sign in')
+    end
   end
 
   describe 'signin' do
@@ -141,6 +151,25 @@ describe "Authentication" do
       describe 'submitting a DELETE request to the Users#destroy action' do
         before {delete user_path(user)}
         specify {response.should redirect_to(root_path)}
+      end
+    end
+
+    describe 'as admin user' do
+      let(:admin) do
+        FactoryGirl.create(:admin)
+      end
+
+      before do
+        sign_in admin
+      end
+
+      describe 'attempting to destroy themselves' do
+        before do
+          delete user_path(admin)
+        end
+        specify do
+          response.should redirect_to(root_path)
+        end
       end
     end
 

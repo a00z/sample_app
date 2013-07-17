@@ -17,13 +17,5 @@
     </div>
     <%= render 'layouts/footer' %>
     <%= debug(params) if Rails.env.development? %>
-    <!--
-    <% if Rails.env.development? %>
-    <div style="padding: 10px;">
-      <% [:content_length, :cookie_jar, :delete?, :flash, :fullpath, :get?, :head?, :headers, :ip, :local?, :media_type, :method, :patch?, :post?, :put?, :server_software, :uuid].each {|k| %>
-        <div><%= k %>: <%= request.send(k).inspect %></div>
-      <% } %>
-    <% end %>
-    -->
   </body>
 </html>

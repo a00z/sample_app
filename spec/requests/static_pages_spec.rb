@@ -19,15 +19,19 @@ describe "Static pages" do
     describe 'for signed-in users' do
       let(:user) {FactoryGirl.create(:user)}
       before do
-        FactoryGirl.create(:micropost, user: user, content: 'Lorem ipsum')
-        FactoryGirl.create(:micropost, user: user, content: 'Dolor sit amet')
         sign_in user
-        visit root_path
       end
 
-      it 'should render the user\'s feed' do
-        user.feed.each do |item|
-          page.should have_selector("li##{item.id}", text: item.content)
+      it 'should render the user\'s feed in various sizes' do
+        (0...5).each do |i|
+          visit root_path
+
+          user.feed.each do |item|
+            page.should have_selector("li##{item.id}", text: item.content)
+          end
+          page.should have_content("#{i} micropost#{i == 1 ? '' : 's'}")
+  
+          FactoryGirl.create(:micropost, user: user, content: "#{i}")
         end
       end
     end

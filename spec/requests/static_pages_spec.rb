@@ -26,13 +26,31 @@ describe "Static pages" do
         (0...5).each do |i|
           visit root_path
 
+          page.should have_content("#{i} micropost#{i == 1 ? '' : 's'}")
           user.feed.each do |item|
             page.should have_selector("li##{item.id}", text: item.content)
           end
-          page.should have_content("#{i} micropost#{i == 1 ? '' : 's'}")
   
           FactoryGirl.create(:micropost, user: user, content: "#{i}")
         end
+      end
+
+      it 'should paginate the user\'s feed' do
+        (0...40).each do |i|
+          FactoryGirl.create(:micropost, user: user, content: "#{i}")
+        end
+
+        visit root_path page: 1
+
+        page.should have_selector("li##{user.feed[0].id}")
+        page.should have_selector("li##{user.feed[29].id}")
+        page.should_not have_selector("li##{user.feed[30].id}")
+
+        visit root_path page: 2
+
+        page.should_not have_selector("li##{user.feed[29].id}")
+        page.should have_selector("li##{user.feed[30].id}")
+        page.should have_selector("li##{user.feed[39].id}")
       end
     end
   end

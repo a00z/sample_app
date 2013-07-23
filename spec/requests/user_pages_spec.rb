@@ -70,13 +70,13 @@ describe "User pages" do
         it 'should increment the followed user count' do
           expect do
             click_button 'Follow'
-          end.to_change(user.followed_users, :count).by(1)
+          end.to change(user.followed_users, :count).by(1)
         end
 
         it 'should increment the other user\'s followers count' do
           expect do
             click_button 'Follow'
-          end.to_change(other_user.followers, :count).by(1)
+          end.to change(other_user.followers, :count).by(1)
         end
 
         describe 'toggling the button' do
@@ -94,13 +94,13 @@ describe "User pages" do
         it 'should decrement the followed user count' do
           expect do
             click_button 'Unfollow'
-          end.to_change(user.followed_users, :count).by(-1)
+          end.to change(user.followed_users, :count).by(-1)
         end
 
         it 'should decrement the other user\'s followers count' do
           expect do
             click_button 'Unfollow'
-          end.to_change(other_user.followers, :count).by(-1)
+          end.to change(other_user.followers, :count).by(-1)
         end
 
         describe 'toggling the button' do
